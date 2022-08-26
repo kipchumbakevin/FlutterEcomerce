@@ -6,7 +6,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../widgets/ItemBottomBar.dart';
 
-class ItemDetails extends StatelessWidget {
+class ItemDetails extends StatefulWidget {
+  @override
+  State<ItemDetails> createState() => _ItemDetailsState();
+}
+
+class _ItemDetailsState extends State<ItemDetails> {
   List<Color>colors = [
     Colors.red,
     Colors.green,
@@ -14,8 +19,15 @@ class ItemDetails extends StatelessWidget {
     Colors.deepOrange,
     Colors.indigo
   ];
+  Map data = {};
+  int quantity = 1;
+  int amount = 200;
+
   @override
   Widget build(BuildContext context) {
+    data = data.isNotEmpty ? data: ModalRoute.of(context)?.settings.arguments as Map;
+    int position = data['position'];
+    int total = quantity*amount;
     return Scaffold(
       backgroundColor: Color(0xFFEDECF2),
       body: ListView(
@@ -24,7 +36,7 @@ class ItemDetails extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(16),
             child: Image.asset(
-                "images/1.png",
+                "images/$position.png",
               height: 300,
             ),
           ),
@@ -75,25 +87,34 @@ class ItemDetails extends StatelessWidget {
                               Container(
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 3,
-                                    blurRadius: 10,
-                                    offset: Offset(0,3)
-                                  )
-                                  ]),
-                                child: Icon(
-                                  CupertinoIcons.plus,
-                                  size: 18,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 3,
+                                          blurRadius: 10,
+                                          offset: Offset(0,3)
+                                      )
+                                    ]),
+                                child: InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      if(quantity !=1)
+                                        quantity = quantity-1;
+                                      total = quantity*amount;
+                                    });
+                                  },
+                                  child: Icon(
+                                    CupertinoIcons.minus,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "01",
+                                  quantity.toString(),
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -114,11 +135,20 @@ class ItemDetails extends StatelessWidget {
                                           offset: Offset(0,3)
                                       )
                                     ]),
-                                child: Icon(
-                                  CupertinoIcons.minus,
-                                  size: 18,
+                                child: InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      quantity = quantity+1;
+                                      total = quantity*amount;
+                                    });
+                                  },
+                                  child: Icon(
+                                    CupertinoIcons.plus,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
+
                             ],
                           )
                         ],
@@ -225,7 +255,7 @@ class ItemDetails extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: ItemBottomBar(),
+      bottomNavigationBar: ItemBottomBar(total),
     );
   }
 }

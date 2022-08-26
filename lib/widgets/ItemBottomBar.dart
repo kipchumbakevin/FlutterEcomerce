@@ -1,7 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ItemBottomBar extends StatelessWidget {
+class ItemBottomBar extends StatefulWidget {
+  int am = 0;
+  ItemBottomBar(this.am);
+  @override
+  State<ItemBottomBar> createState() => _ItemBottomBarState();
+}
+
+class _ItemBottomBarState extends State<ItemBottomBar> {
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +32,9 @@ class ItemBottomBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "\$120",
+              "Ksh."+ widget.am.toString(),
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF4C53A5),
               ),
